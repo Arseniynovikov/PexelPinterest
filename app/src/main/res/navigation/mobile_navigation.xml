@@ -26,11 +26,18 @@
         <action
             android:id="@+id/action_navigation_detail_to_navigation_home"
             app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_detail_to_navigation_bookmark2"
+            app:destination="@id/navigation_bookmark" />
     </fragment>
     <fragment
         android:id="@+id/navigation_bookmark"
         android:name="com.example.pinterest.ui.bookmarks.BookmarkFragment"
         android:label="fragment_bookmark"
-        tools:layout="@layout/fragment_bookmark" />
+        tools:layout="@layout/fragment_bookmark" >
+        <action
+            android:id="@+id/action_navigation_bookmark_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
 
 </navigation>

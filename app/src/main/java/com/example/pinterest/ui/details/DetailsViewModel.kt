@@ -1,12 +1,14 @@
 package com.example.pinterest.ui.details
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pinterest.PhotoRepository
+import com.example.pinterest.repository.PhotoRepository
 import com.example.pinterest.data.pexelModels.Photo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,6 +16,9 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val repository: PhotoRepository
 ) : ViewModel() {
+
+    private val _isBookmarked = MutableLiveData<Boolean>()
+    val isBookmarked: LiveData<Boolean> = _isBookmarked
 
     private val _photo = MutableLiveData<Photo>()
     val photo: LiveData<Photo> = _photo
@@ -28,7 +33,7 @@ class DetailsViewModel @Inject constructor(
         viewModelScope.launch {
             _loading.value = true
             try {
-                _photo.value = repository.getPhotoDetails(id)
+                _photo.value = repository.getPhotoById(id)
             } catch (e: Exception) {
                 _error.value = e.message
             } finally {
@@ -37,4 +42,25 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
+    fun addNewBookmark(){
+        viewModelScope.launch {
+            _photo.value?.let { repository.insertBookmark(it) }
+            _isBookmarked.value = true
+        }
+    }
+
+    fun deleteBookmark(id: Long){
+        viewModelScope.launch {
+            repository.deleteBookmark(id)
+            _isBookmarked.value = false
+        }
+    }
+
+    fun checkBookmark(id: Long) {
+
+        viewModelScope.launch {
+            _isBookmarked.value = repository.isBookmarked(id)
+        }
+        Log.e("isBooked", "${_isBookmarked.value}")
+    }
 }

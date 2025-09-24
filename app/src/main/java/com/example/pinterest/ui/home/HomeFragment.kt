@@ -1,6 +1,8 @@
 package com.example.pinterest.ui.home
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,12 +45,6 @@ class HomeFragment : Fragment() {
         }
 
 
-        observeUi()
-
-        viewModel.loadCurated()
-    }
-
-    private fun observeUi() {
         viewModel.photos.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }
@@ -56,5 +52,24 @@ class HomeFragment : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
+        viewModel.loadCurated()
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s.toString().trim()
+                if (query.isNotEmpty()) {
+                    viewModel.search(query)
+                    binding.clearTextButton.visibility = View.VISIBLE
+                } else {
+                    viewModel.loadCurated()
+                    binding.clearTextButton.visibility = View.GONE
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+        binding.clearTextButton.setOnClickListener{
+            binding.searchEditText.setText("")
+            binding.clearTextButton.visibility = View.GONE
+        }
     }
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pinterest.PhotoRepository
+import com.example.pinterest.repository.PhotoRepository
 import com.example.pinterest.data.pexelModels.Photo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -31,6 +31,23 @@ class HomeViewModel @Inject constructor(
                 Log.e("home", "${photos.value}")
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Error: ${e.message}")
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
+
+    fun search(query: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            try {
+                val response = repository.search(query, 1, 30)
+                _photos.value = response.photos
+            } catch (e: Exception) {
+
+                Log.e("HomeViewModel", "Error: ${e.message}")
+
+
             } finally {
                 _loading.value = false
             }

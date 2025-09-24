@@ -21,5 +21,5 @@ interface PexelApi {
     ): PhotoResponse
 
     @GET("v1/photos/{id}")
-    suspend fun getPhotoDetails(@Path("id") id: Long): Photo
+    suspend fun getPhotoById(@Path("id") id: Long): Photo
 }

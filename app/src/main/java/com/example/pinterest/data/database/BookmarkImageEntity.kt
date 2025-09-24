@@ -1,8 +1,11 @@
-package com.example.pinterest.data.models
+package com.example.pinterest.data.database
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class BookmarkImages(
-    val id: Long,
+@Entity(tableName = "bookmarks_image")
+data class BookmarkImageEntity(
+    @PrimaryKey val id: Long,
     val url: String,
     val photographer: String,
     val photographerUrl: String,
