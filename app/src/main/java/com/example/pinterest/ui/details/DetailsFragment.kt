@@ -6,37 +6,62 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import com.example.pinterest.databinding.FragmentDashboardBinding
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.example.pinterest.MainActivity
+import com.example.pinterest.databinding.FragmentDetailsBinding
+import com.example.pinterest.ui.home.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private lateinit var binding: FragmentDetailsBinding
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private val viewModel: DetailsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val detailsViewModel =
-            ViewModelProvider(this).get(DetailsViewModel::class.java)
-
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textDashboard
-        detailsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.backButton.setOnClickListener {
+            findNavController().navigate(
+                DetailsFragmentDirections.actionNavigationDetailToNavigationHome()
+            )
+        }
+
+
+        val photoId = arguments?.getLong("id")
+            ?: throw IllegalArgumentException("Photo id required")
+
+        viewModel.loadPhotoDetails(photoId)
+
+        viewModel.photo.observe(viewLifecycleOwner) { photo ->
+            binding.nameText.text = photo.photographer
+            Glide.with(this)
+                .load(photo.src.large)
+                .into(binding.imageView)
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).setBottomNavVisibility(false)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (requireActivity() as MainActivity).setBottomNavVisibility(true)
     }
 }
