@@ -22,13 +22,13 @@ class HomeViewModel @Inject constructor(
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
-    fun loadCurated(page: Int = 1, perPage: Int = 20) {
+    fun loadCurated(page: Int = 1, perPage: Int = 30) {
         viewModelScope.launch {
             _loading.value = true
             try {
                 val response = repository.getCurated(page = page, perPage = perPage)
                 _photos.value = response.photos
-                Log.e("home", "${photos.value}")
+
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Error: ${e.message}")
             } finally {

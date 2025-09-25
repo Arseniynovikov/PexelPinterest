@@ -1,10 +1,15 @@
 package com.example.pinterest.ui.details
 
+import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,6 +22,7 @@ import com.example.pinterest.R
 import com.example.pinterest.databinding.FragmentDetailsBinding
 import com.example.pinterest.ui.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -77,6 +83,11 @@ class DetailsFragment : Fragment() {
                 }
             }
         }
+
+        binding.downloadButton.setOnClickListener {
+            downloadImage(viewModel.photo.value!!.src.large, "${viewModel.photo.value!!.id}.jpg")
+            Toast.makeText(requireContext(), "Downloading image...", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onResume() {
@@ -87,5 +98,17 @@ class DetailsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         (requireActivity() as MainActivity).setBottomNavVisibility(true)
+    }
+
+    private fun downloadImage(url: String, fileName: String) {
+        val request = DownloadManager.Request(url.toUri())
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+            .setAllowedOverMetered(true)
+            .setAllowedOverRoaming(true)
+
+        val downloadManager =
+            requireContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        downloadManager.enqueue(request)
     }
 }

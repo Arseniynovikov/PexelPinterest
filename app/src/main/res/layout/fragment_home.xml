@@ -9,7 +9,7 @@
 
 
     <TableRow
-        android:id="@+id/ma"
+        android:id="@+id/searchRow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="25dp"
@@ -30,6 +30,7 @@
             android:id="@+id/clearTextButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:visibility="invisible"
             app:srcCompat="@drawable/clean_vector" />
 
     </TableRow>
@@ -38,8 +39,7 @@
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:visibility="visible" />
+        android:layout_height="4dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -49,6 +49,50 @@
         android:padding="8dp"
         android:scrollbars="vertical"
         tools:listitem="@layout/item_photo" />
+
+    <LinearLayout
+        android:id="@+id/noInternetView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/no_network_icon" />
+
+        <Button
+            android:id="@+id/reloadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Try again"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/noDataFounded"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No results found" />
+
+        <Button
+            android:id="@+id/exploreButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Explore"
+            android:textSize="18sp" />
+    </LinearLayout>
 </TableLayout>
 
 

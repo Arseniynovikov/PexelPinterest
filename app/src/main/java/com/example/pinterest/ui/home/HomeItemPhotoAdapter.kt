@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pinterest.R
 import com.example.pinterest.data.pexelModels.Photo
+import com.google.android.material.imageview.ShapeableImageView
 
 class HomeItemPhotoAdapter( private val onClick: (Photo) -> Unit
 ) : ListAdapter<Photo, HomeItemPhotoAdapter.HomeItemPhotoViewHolder>(DiffCallback) {
@@ -20,13 +21,13 @@ class HomeItemPhotoAdapter( private val onClick: (Photo) -> Unit
     }
 
     inner class HomeItemPhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        private val imageView: ShapeableImageView = itemView.findViewById(R.id.imageView)
 
         fun bind(photo: Photo) {
             Glide.with(imageView.context)
                 .load(photo.src.medium)
                 .placeholder(R.drawable.placeholder)
-                .centerCrop()
+                .fitCenter()
                 .into(imageView)
 
             itemView.setOnClickListener { onClick(photo) }
