@@ -9,28 +9,29 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pinterest.R
+import com.example.pinterest.data.models.UIImage
 import com.example.pinterest.data.pexelModels.Photo
 import com.google.android.material.imageview.ShapeableImageView
 
-class HomeItemPhotoAdapter( private val onClick: (Photo) -> Unit
-) : ListAdapter<Photo, HomeItemPhotoAdapter.HomeItemPhotoViewHolder>(DiffCallback) {
+class HomeItemPhotoAdapter( private val onClick: (UIImage) -> Unit
+) : ListAdapter<UIImage, HomeItemPhotoAdapter.HomeItemPhotoViewHolder>(DiffCallback) {
 
-    object DiffCallback : DiffUtil.ItemCallback<Photo>() {
-        override fun areItemsTheSame(oldItem: Photo, newItem: Photo) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Photo, newItem: Photo) = oldItem == newItem
+    object DiffCallback : DiffUtil.ItemCallback<UIImage>() {
+        override fun areItemsTheSame(oldItem: UIImage, newItem: UIImage) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: UIImage, newItem: UIImage) = oldItem == newItem
     }
 
     inner class HomeItemPhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ShapeableImageView = itemView.findViewById(R.id.imageView)
 
-        fun bind(photo: Photo) {
+        fun bind(uiImage: UIImage) {
             Glide.with(imageView.context)
-                .load(photo.src.medium)
+                .load(uiImage.mediumSrc)
                 .placeholder(R.drawable.placeholder)
                 .fitCenter()
                 .into(imageView)
 
-            itemView.setOnClickListener { onClick(photo) }
+            itemView.setOnClickListener { onClick(uiImage) }
         }
     }
 

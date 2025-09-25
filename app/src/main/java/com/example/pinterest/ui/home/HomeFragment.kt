@@ -48,17 +48,17 @@ class HomeFragment : Fragment() {
         })
 
         binding.recyclerView.apply {
-            adapter = this@HomeFragment.adapter
+
             val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 
             binding.recyclerView.layoutManager = layoutManager
             binding.recyclerView.setHasFixedSize(true)
-
+            adapter = this@HomeFragment.adapter
         }
 
 
-        viewModel.photos.observe(viewLifecycleOwner) { list ->
+        viewModel.image.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
             noDataFound(list.isEmpty())
         }
@@ -110,6 +110,7 @@ class HomeFragment : Fragment() {
         })
         binding.clearTextButton.setOnClickListener {
             binding.searchEditText.setText("")
+            viewModel.loadCurated()
             binding.clearTextButton.visibility = View.GONE
         }
     }

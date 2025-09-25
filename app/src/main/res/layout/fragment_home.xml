@@ -10,26 +10,29 @@
 
     <TableRow
         android:id="@+id/searchRow"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="25dp"
-        android:gravity="center">
+        android:background="@drawable/download_block">
 
         <EditText
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_weight="1"
             android:background="@null"
             android:drawableStart="@drawable/search_icon"
             android:ems="10"
             android:hint="Search"
             android:imeOptions="actionSearch"
-            android:inputType="text" />
+            android:inputType="text"
+            android:paddingStart="15dp"/>
 
         <ImageButton
             android:id="@+id/clearTextButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:background="@drawable/circle_gray"
             android:visibility="invisible"
             app:srcCompat="@drawable/clean_vector" />
 

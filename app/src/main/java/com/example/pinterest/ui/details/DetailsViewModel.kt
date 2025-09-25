@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pinterest.data.models.BookmarkImages
+import com.example.pinterest.data.models.UIImage
 import com.example.pinterest.repository.PhotoRepository
 import com.example.pinterest.data.pexelModels.Photo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +22,8 @@ class DetailsViewModel @Inject constructor(
     private val _isBookmarked = MutableLiveData<Boolean>()
     val isBookmarked: LiveData<Boolean> = _isBookmarked
 
-    private val _photo = MutableLiveData<Photo>()
-    val photo: LiveData<Photo> = _photo
+    private val _image = MutableLiveData<UIImage>()
+    val photo: LiveData<UIImage> = _image
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -29,11 +31,11 @@ class DetailsViewModel @Inject constructor(
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    fun loadPhotoDetails(id: Long) {
+    fun loadImageDetails(id: Long) {
         viewModelScope.launch {
             _loading.value = true
             try {
-                _photo.value = repository.getPhotoById(id)
+                _image.value = repository.getImageById(id)
             } catch (e: Exception) {
                 _error.value = e.message
             } finally {
@@ -44,7 +46,7 @@ class DetailsViewModel @Inject constructor(
 
     fun addNewBookmark(){
         viewModelScope.launch {
-            _photo.value?.let { repository.insertBookmark(it) }
+            _image.value?.let { repository.insertBookmark(it) }
             _isBookmarked.value = true
         }
     }

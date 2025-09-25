@@ -8,10 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.pinterest.R
 import com.example.pinterest.databinding.FragmentBookmarkBinding
-import com.example.pinterest.databinding.FragmentHomeBinding
-import com.example.pinterest.ui.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -10,30 +10,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pinterest.R
 import com.example.pinterest.data.models.BookmarkImages
+import com.example.pinterest.data.models.UIImage
 
 class BookmarkItemAdapter(
-    private val onClick: (BookmarkImages) -> Unit
-) : ListAdapter<BookmarkImages, BookmarkItemAdapter.BookmarkItemViewHolder>(DiffCallback) {
+    private val onClick: (UIImage) -> Unit
+) : ListAdapter<UIImage, BookmarkItemAdapter.BookmarkItemViewHolder>(DiffCallback) {
 
-    object DiffCallback : DiffUtil.ItemCallback<BookmarkImages>() {
-        override fun areItemsTheSame(oldItem: BookmarkImages, newItem: BookmarkImages) =
+    object DiffCallback : DiffUtil.ItemCallback<UIImage>() {
+        override fun areItemsTheSame(oldItem: UIImage, newItem: UIImage) =
             oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: BookmarkImages, newItem: BookmarkImages) =
+        override fun areContentsTheSame(oldItem: UIImage, newItem: UIImage) =
             oldItem == newItem
     }
 
     inner class BookmarkItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.imageView)
 
-        fun bind(bookmarkImages: BookmarkImages) {
+        fun bind(images: UIImage) {
             Glide.with(imageView.context)
-                .load(bookmarkImages.srcMedium)
+                .load(images.mediumSrc)
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
                 .into(imageView)
 
-            itemView.setOnClickListener { onClick(bookmarkImages) }
+            itemView.setOnClickListener { onClick(images) }
         }
     }
 

@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,34 +51,29 @@ class DetailsFragment : Fragment() {
         val photoId = arguments?.getLong("id")
             ?: throw IllegalArgumentException("Photo id required")
 
-        viewModel.loadPhotoDetails(photoId)
+
+        viewModel.loadImageDetails(photoId)
+
         viewModel.photo.observe(viewLifecycleOwner) { photo ->
             binding.nameText.text = photo.photographer
             Glide.with(this)
-                .load(photo.src.large)
+                .load(photo.largeSrc)
                 .into(binding.imageView)
         }
+
 
         viewModel.checkBookmark(photoId)
         viewModel.isBookmarked.observe(viewLifecycleOwner) { bookmarked ->
 
             if (bookmarked) {
-                binding.bookmarkButton.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
-                    )
-                )
+                binding.bookmarkButton.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.circle_red)
                 binding.bookmarkButton.setOnClickListener {
                     viewModel.deleteBookmark(photoId)
                 }
             } else {
-                binding.bookmarkButton.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.dark_gray
-                    )
-                )
+                binding.bookmarkButton.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.circle_gray)
                 binding.bookmarkButton.setOnClickListener {
                     viewModel.addNewBookmark()
                 }
@@ -85,7 +81,7 @@ class DetailsFragment : Fragment() {
         }
 
         binding.downloadButton.setOnClickListener {
-            downloadImage(viewModel.photo.value!!.src.large, "${viewModel.photo.value!!.id}.jpg")
+            downloadImage(viewModel.photo.value!!.largeSrc, "${viewModel.photo.value!!.id}.jpg")
             Toast.makeText(requireContext(), "Downloading image...", Toast.LENGTH_SHORT).show()
         }
     }
