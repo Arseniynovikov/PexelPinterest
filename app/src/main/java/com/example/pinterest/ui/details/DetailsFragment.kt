@@ -66,14 +66,14 @@ class DetailsFragment : Fragment() {
         viewModel.isBookmarked.observe(viewLifecycleOwner) { bookmarked ->
 
             if (bookmarked) {
-                binding.bookmarkButton.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.circle_red)
+                binding.bookmarkButton.setImageResource(R.drawable.bookmark_red)
+
                 binding.bookmarkButton.setOnClickListener {
                     viewModel.deleteBookmark(photoId)
                 }
+
             } else {
-                binding.bookmarkButton.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.circle_gray)
+                binding.bookmarkButton.setImageResource(R.drawable.bookmark)
                 binding.bookmarkButton.setOnClickListener {
                     viewModel.addNewBookmark()
                 }

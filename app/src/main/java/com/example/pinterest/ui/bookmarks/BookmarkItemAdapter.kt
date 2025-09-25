@@ -3,14 +3,14 @@ package com.example.pinterest.ui.bookmarks
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pinterest.R
-import com.example.pinterest.data.models.BookmarkImages
 import com.example.pinterest.data.models.UIImage
+import com.google.android.material.imageview.ShapeableImageView
 
 class BookmarkItemAdapter(
     private val onClick: (UIImage) -> Unit
@@ -25,16 +25,18 @@ class BookmarkItemAdapter(
     }
 
     inner class BookmarkItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        private val imageView: ShapeableImageView = itemView.findViewById(R.id.imageView)
+        private val name: TextView = itemView.findViewById(R.id.nameTextView)
 
-        fun bind(images: UIImage) {
+        fun bind(image: UIImage) {
             Glide.with(imageView.context)
-                .load(images.mediumSrc)
+                .load(image.mediumSrc)
                 .placeholder(R.drawable.placeholder)
-                .centerCrop()
+                .fitCenter()
                 .into(imageView)
 
-            itemView.setOnClickListener { onClick(images) }
+            name.text = image.photographer
+            itemView.setOnClickListener { onClick(image) }
         }
     }
 

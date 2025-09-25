@@ -42,8 +42,8 @@ class HomeFragment : Fragment() {
         networkState(requireContext())
 
 
-        adapter = HomeItemPhotoAdapter(onClick = { photo ->
-            val action = HomeFragmentDirections.actionNavigationHomeToNavigationDetail(photo.id)
+        adapter = HomeItemPhotoAdapter(onClick = { image ->
+            val action = HomeFragmentDirections.actionNavigationHomeToNavigationDetail(image.id)
             findNavController().navigate(action)
         })
 
