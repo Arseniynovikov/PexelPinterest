@@ -14,9 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.pinterest.databinding.FragmentHomeBinding
 import com.example.pinterest.utils.isNetworkAvailable
+import com.google.android.material.search.SearchBar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +28,8 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     private lateinit var adapter: HomeItemPhotoAdapter
+
+    private lateinit var featuredItemAdapter: FeaturedItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +62,21 @@ class HomeFragment : Fragment() {
         }
 
 
+
+        val featured = listOf(
+            "Nature", "Technology", "Travel",
+            "Food", "Animals", "Art", "Sports"
+        )
+        val featuredCopy = featured.toMutableList()
+
+        binding.featuredRecycler.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        featuredItemAdapter = FeaturedItemAdapter(featuredCopy) { query ->
+            binding.searchEditText.setText(query)
+        }
+        binding.featuredRecycler.adapter = featuredItemAdapter
+
         viewModel.image.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
             noDataFound(list.isEmpty())
@@ -65,7 +84,15 @@ class HomeFragment : Fragment() {
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
+
         editMethod()
+
+        binding.clearTextButton.setOnClickListener {
+            binding.searchEditText.setText("")
+            viewModel.loadCurated()
+            binding.clearTextButton.visibility = View.GONE
+            featuredItemAdapter.reset(featured)
+        }
 
     }
 
@@ -98,7 +125,6 @@ class HomeFragment : Fragment() {
                 val query = s.toString().trim()
                 if (query.isNotEmpty()) {
                     viewModel.search(query)
-
                     binding.clearTextButton.visibility = View.VISIBLE
                 } else {
                     viewModel.loadCurated()
@@ -108,11 +134,6 @@ class HomeFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
-        binding.clearTextButton.setOnClickListener {
-            binding.searchEditText.setText("")
-            viewModel.loadCurated()
-            binding.clearTextButton.visibility = View.GONE
-        }
     }
 
     private fun noDataFound(dataRequest: Boolean){
@@ -125,13 +146,10 @@ class HomeFragment : Fragment() {
                 binding.searchEditText.setText("")
                 editMethod()
             }
-
         } else {
             binding.recyclerView.visibility = View.VISIBLE
             binding.progressBar.visibility = View.VISIBLE
             binding.noDataFounded.visibility = View.GONE
         }
-
     }
-
 }
